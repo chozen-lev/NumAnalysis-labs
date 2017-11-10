@@ -18,6 +18,11 @@ double df(double x)
     return 3*cos(x)/sqrt(2+3*sin(x))-0.5;
 }
 
+double d2f(double x)
+{
+    return (-3*sin(x)*sqrt(2+3*sin(x))-4.5*cos(x)*cos(x)/sqrt(2+3*sin(x)))/(2+3*sin(x));
+}
+
 double phi(double x, double lambda)
 {
     return df(x) > 0.0 ? x - lambda*f(x) : x + lambda*f(x);
@@ -38,18 +43,18 @@ double iterativeMethod(double a, double b, double eps, double &delta, unsigned i
         xk = phi(x0, lambda);
         iter++;
     } while (fabs(xk-x0) > (1-q)/q*eps);
-    delta = fabs(xk-x0);
+    delta = fabs(xk-x0)*q/(1-q);
 
     return xk;
 }
 
 double tangentsMethod(double a, double b, double eps, double &delta, unsigned int &iter)
 {
-    double m1 = fabs(df(a)), M1 = fabs(df(b));
+    double m1 = fabs(df(a)), M1 = fabs(df(b)), xk;
     if (m1 > M1) {
         std::swap(m1, M1);
     }
-    double xk = a;
+    xk = f(a)*d2f(a) > 0 ? a : b;
     iter = 0;
 
     do
@@ -102,14 +107,15 @@ void printTableCompare(double a, double b)
 int main()
 {
     printTableIterative(3.2, 3.7); printf("\n");
-    printTableIterative(6.2, 6.7); printf("\n");
-    printTableIterative(8.2, 8.7); printf("\n");
-
     printTableTangents(3.2, 3.7); printf("\n");
+
+    printTableIterative(6.2, 6.7); printf("\n");
     printTableTangents(6.2, 6.7); printf("\n");
+
+    printTableIterative(8.2, 8.7); printf("\n");
     printTableTangents(8.2, 8.7); printf("\n");
 
-    printTableCompare(3.2, 3.7); printf("\n");
+    printTableCompare(3.2, 3.7);
 
     return 0;
 }
