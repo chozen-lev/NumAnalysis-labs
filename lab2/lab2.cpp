@@ -50,10 +50,7 @@ double iterativeMethod(double a, double b, double eps, double &delta, unsigned i
 
 double tangentsMethod(double a, double b, double eps, double &delta, unsigned int &iter)
 {
-    double m1 = fabs(df(a)), M1 = fabs(df(b)), xk;
-    if (m1 > M1) {
-        std::swap(m1, M1);
-    }
+    double m1 = std::min(abs(df(a)), abs(df(b))), xk;
     xk = f(a)*d2f(a) > 0 ? a : b;
     iter = 0;
 
