@@ -13,29 +13,29 @@
 #define A 2
 #define B 87
 
-#define EPS_START 1e-3
-#define EPS_END 1e-9
-#define EPS_STEP 1e-3
+#define EPS_START 1e-2
+#define EPS_END 1e-8
+#define EPS_STEP 1e-2
 
 //#define d2f(x) (2*cos(x)*(exp(sin(x))*cos(x)*cos(x)-exp(sin(x))-(2*exp(sin(x)+1)*cos(x)-4*exp(sin(x))*sin(x)*cos(x))))
 //#define M2 abs(d2f(18.970216999999998))
 #define M2 11.048309686793592 // x = 18.970216999999998
 
-double f(double x)
+double f(const double x)
 {
     return cos(x)*(1 + 2*exp(sin(x)));
 }
 
-double F(double x)
+double F(const double x)
 {
     return 2*exp(sin(x)) + sin(x);
 }
 
-double Trapezoidal(const double a, const double b, const double _h)
+double Trapezoidal(const double a, const double b, double h)
 {
     double In = 0.0;
-    int n = (B - A)/_h;
-    double h = (double)(B - A)/n;
+    int n = (b - a)/h;
+    h = (b - a)/n;
 
     for (int i = 1; i < n; i++) {
         In += f(a + i*h);
@@ -46,7 +46,7 @@ double Trapezoidal(const double a, const double b, const double _h)
     return In*h;
 }
 
-double print_table1(double integral, double eps)
+double print_table1(const double integral, const double eps)
 {
     double value, delta, h = sqrt(12*eps/(B - A)/M2);
 
@@ -58,7 +58,7 @@ double print_table1(double integral, double eps)
     return delta;
 }
 
-void print_table2(double integral, double eps)
+void print_table2(const double integral, const double eps)
 {
     long long int n = (B - A)/sqrt(eps);
     double In = 0.0, I2n = 0.0;
@@ -90,7 +90,7 @@ int main()
     }
 
     printf("\neps\t\th\tdelta\n");
-    for (int i = 0; i < deltas.size(); i++) {
+    for (unsigned i = 0; i < deltas.size(); i++) {
         print_table2(IntegralNL, deltas[i]);
     }
 
