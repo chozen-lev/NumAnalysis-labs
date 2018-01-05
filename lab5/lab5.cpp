@@ -25,7 +25,7 @@
 #define NUM 100 // кількість точок для виведення в файл
 #define FILE_PATH "table.csv"
 
-#define f(x) (10*x*x*cosh(x)*sin(13*x))
+#define f(x) (10*(x)*(x)*cosh(x)*sin(13*(x)))
 
 double vector[N];
 
