@@ -32,10 +32,10 @@ void get_matrix(double matrix[][N + 1], double a, double b)
     memset(matrix, 0, N*(N + 1)*sizeof(double));
 
     for (int i = 1; i < N - 1; i++, x += h) {
-        matrix[i][i - 1] = h; // a
-        matrix[i][i] = 4*h; // c
-        matrix[i][i + 1] = h; // b
-        matrix[i][N] = 6*(f(x - h) + 2*f(x) - f(x + h))/h; // F
+        matrix[i][i - 1] = h; // A
+        matrix[i][i] = 4*h; // C
+        matrix[i][i + 1] = h; // B
+        matrix[i][N] = 6*(f(x - h) - 2*f(x) + f(x + h))/h; // F
     }
     matrix[0][0] = 1.0;
     matrix[N - 1][N - 1] = 1.0;
@@ -44,17 +44,18 @@ void get_matrix(double matrix[][N + 1], double a, double b)
 // метод прогону
 void Tridiagonal(double matrix[][N + 1], double vector[N])
 {
-    double buff;
-    for (int i = 1; i < N; i++)
-    {
-        buff = matrix[i][i - 1]/matrix[i][i];
-        matrix[i][i] -= buff*matrix[i][i + 1];
+    double alfa[N], beta[N];
+
+    alfa[0] = -matrix[0][1]/matrix[0][0];
+    beta[0] = matrix[0][N]/matrix[0][0];
+    for (int i = 0; i < N - 1; i++) {
+        alfa[i + 1] = -matrix[i][i + 1]/(matrix[i][i - 1]*alfa[i] + matrix[i][i]);
+        beta[i + 1] = (matrix[i][N] - matrix[i][i - 1]*beta[i])/(matrix[i][i - 1]*alfa[i] + matrix[i][i]);
     }
 
-    vector[N - 1] = matrix[N - 1][N - 1]/matrix[N - 1][N - 1];
-
+    vector[N - 1] = (matrix[N - 1][N] - matrix[N - 2][N - 3]*beta[N - 1])/(matrix[N - 1][N - 2]*alfa[N - 1] + matrix[N - 1][N - 1]);
     for (int i = N - 2; i >= 0; i--) {
-        vector[i] = (matrix[i][N] - vector[N - 1]*matrix[i][i + 1])/matrix[i][i];
+        vector[i] = alfa[i + 1]*vector[i + 1] + beta[i + 1];
     }
 }
 
