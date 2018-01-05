@@ -13,11 +13,12 @@
 
 #define A 0
 #define B 1.2
-#define N 100
+#define M 100 // кількість кубічних сплайнів
+#define N (M+1)
 
 #define FILE_PATH "table.csv"
 
-#define f(x) (10*x*x*cosh(x)*sin(13*x))
+#define f(x) (10*(x)*(x)*cosh(x)*sin(13*(x)))
 
 typedef struct
 {
@@ -26,8 +27,8 @@ typedef struct
 
 void get_matrix(double matrix[][N + 1], double a, double b)
 {
-    const double h = (b - a)/N;
-    double x = a;
+    const double h = (b - a)/M;
+    double x = a + h;
 
     memset(matrix, 0, N*(N + 1)*sizeof(double));
 
@@ -61,7 +62,7 @@ void Tridiagonal(double matrix[][N + 1], double vector[N])
 
 void get_splines(double a, double b, const double c[N], Spline splines[N])
 {
-    const double h = (b - a)/N;
+    const double h = (b - a)/M;
     double x = a;
 
     splines[0].a = f(x);
