@@ -133,10 +133,11 @@ void get_matrix(double matrix[][N + 1], double a, double b, double eps)
 
 void GaussianElimination(const double _matrix[][N + 1], double vector[N], const int n)
 {
-    double matrix[n][n + 1], max, buff;
+    double *matrix[n], max, buff;
     int maxRow;
 
     for (int i = 0; i < n; i++) {
+        matrix[i] = new double[n + 1];
         memcpy(matrix[i], _matrix[i], n*sizeof(double));
         matrix[i][n] = _matrix[i][N];
     }
@@ -175,6 +176,7 @@ void GaussianElimination(const double _matrix[][N + 1], double vector[N], const 
         for (int k = i - 1; k >= 0; k--) {
             matrix[k][n] -= matrix[k][i]*vector[i];
         }
+        delete[] matrix[i];
     }
 }
 
