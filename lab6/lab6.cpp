@@ -94,7 +94,7 @@ int main()
     std::ofstream file(FILE_PATH, std::ofstream::out);
 
     int i = 0;
-    const double h = (double)(B - A)/N;
+    const double h = (double)(B - A)/M;
     double y;
     for (double x = A; x <= B; x += h, i++) {
         y = spline(splines[i], x);
